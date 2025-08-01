@@ -20,10 +20,14 @@ public class Main {
             if (password.equals("end")) {
                 break;
             }
-            if (checker.verify(password)) {
-                System.out.println("Подходит!");
-            } else {
-                System.out.println("Не подходит!");
+            try {
+                if (checker.verify(password)) {
+                    System.out.println("Подходит!");
+                } else {
+                    System.out.println("Не подходит!");
+                }
+            } catch (IllegalStateException e) {
+                System.out.println("Ошибка: " + e.getMessage());
             }
         }
 

@@ -20,14 +20,17 @@ package ru.netology.android.exceptions;
  */
 public class PasswordChecker {
 
-    int minLength;
-    int maxRepeats;
+    private int minLength;
+    private int maxRepeats;
+    private boolean isLengthSet = false;
+    private boolean isRepeatsSet = false;
 
     public void setMinLength(int minLength) {
         if (minLength < 0) {
             throw new IllegalArgumentException("Min length must be positive");
         }
         this.minLength = minLength;
+        this.isLengthSet = true;
     }
 
     public void setMaxRepeats(int maxRepeats) {
@@ -35,9 +38,13 @@ public class PasswordChecker {
             throw new IllegalArgumentException("Max repeats must be positive");
         }
         this.maxRepeats = maxRepeats;
+        this.isRepeatsSet = true;
     }
 
     public boolean verify(String password) {
+        if (!isLengthSet && !isRepeatsSet) {
+            throw new IllegalStateException("Одна из необходимых настроек не была выставлена");
+        }
         if (!isTooFrequent(password, maxRepeats) && !isTooShort(password, minLength)) {
             return true;
         } else
