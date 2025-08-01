@@ -1,0 +1,62 @@
+package ru.netology.android.exceptions;
+
+/**
+ * предстоит написать класс PasswordChecker, объект которого умеет проверять надёжность пароля.
+ * <p>
+ * У этого класса должны быть методы-настройки:
+ * <p>
+ * setMinLength — сеттер установки минимально допустимой длины пароля. Если в сеттер передали
+ * недопустимое значение (отрицательное число), то должно выкинуться исключение IllegalArgumentException,
+ * т. е. исключение недопустимого аргумента, с соответствующим сообщением;
+ * setMaxRepeats — сеттер установки максимально допустимого количества повторений символа подряд.
+ * Если в сеттер передали недопустимое значение (отрицательное число или 0), то должно выкинуться
+ * исключение IllegalArgumentException, т. е. исключение недопустимого аргумента, с соответствующим сообщением.
+ * И метод проверки boolean verify(String password), который проверяет переданный пароль на эти два критерия.
+ * Если пароль проходит, возвращает true, не проходит — false. Если до вызова метода verify хотя бы одна из двух
+ * вышеперечисленных настроек не была выставлена чекеру, то в нём кидается исключение IllegalStateException,
+ * т. е. исключение недопустимого состояния, с соответствующим сообщением.
+ * <p>
+ * В main спросите у пользователя настройки для чекера, создайте объект чекера и в бесконечном цикле — до ввода end — спрашивайте у пользователя пароли, которые затем проверяйте чекером и выводите на экран результат. Если пользователь ввёл недопустимые настройки, то программа не должна вылетать с исключением. Поймайте его, выведите на экран сообщение об ошибке и завершите программу.
+ */
+public class PasswordChecker {
+
+    int minLength;
+    int maxRepeats;
+
+    public void setMinLength(int minLength) {
+        if (minLength < 0) {
+            throw new IllegalArgumentException("Min length must be positive");
+        }
+        this.minLength = minLength;
+    }
+
+    public void setMaxRepeats(int maxRepeats) {
+        if (maxRepeats <= 0) {
+            throw new IllegalArgumentException("Max repeats must be positive");
+        }
+        this.maxRepeats = maxRepeats;
+    }
+
+    public boolean verify(String password) {
+        if (!isTooFrequent(password, maxRepeats) && !isTooShort(password, minLength)) {
+            return true;
+        } else
+            return false;
+    }
+
+    public boolean isTooFrequent(String password, int maxRepeats) {
+        for (int i = 0; i < password.length(); i++) {
+            if (password.contains(String.valueOf(password.charAt(i)).repeat(maxRepeats + 1))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isTooShort(String password, int minLength) {
+        if (password.length() < minLength) {
+            return true;
+        }
+        return false;
+    }
+}
