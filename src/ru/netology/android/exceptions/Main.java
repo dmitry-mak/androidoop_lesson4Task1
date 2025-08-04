@@ -7,29 +7,34 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         PasswordChecker checker = new PasswordChecker();
-        System.out.print("Введите минимальную длину пароля: ");
-        int passwordMinLength = scanner.nextInt();
-        checker.setMinLength(passwordMinLength);
-        System.out.print("Введите макс. допустимое количество повторений символа подряд: ");
-        int passwordMaxRepeats = scanner.nextInt();
-        checker.setMaxRepeats(passwordMaxRepeats);
-        scanner.nextLine();
-        while (true) {
-            System.out.print("Введите пароль или end:");
-            String password = scanner.nextLine();
-            if (password.equals("end")) {
-                break;
-            }
-            try {
+
+        try {
+            System.out.print("Введите минимальную длину пароля: ");
+            int passwordMinLength = Integer.parseInt(scanner.nextLine());
+            checker.setMinLength(passwordMinLength);
+            System.out.print("Введите макс. допустимое количество повторений символа подряд: ");
+            int passwordMaxRepeats = Integer.parseInt(scanner.nextLine());
+            checker.setMaxRepeats(passwordMaxRepeats);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            while (true) {
+                System.out.print("Введите пароль или end:");
+                String password = scanner.nextLine();
+                if (password.equals("end")) {
+                    break;
+                }
+
                 if (checker.verify(password)) {
                     System.out.println("Подходит!");
                 } else {
                     System.out.println("Не подходит!");
                 }
-            } catch (IllegalStateException e) {
-                System.out.println("Ошибка: " + e.getMessage());
             }
+        } catch (IllegalStateException e) {
+            System.out.println("Ошибка: " + e.getMessage());
         }
-
     }
 }

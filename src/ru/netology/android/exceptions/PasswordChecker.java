@@ -42,7 +42,7 @@ public class PasswordChecker {
     }
 
     public boolean verify(String password) {
-        if (!isLengthSet && !isRepeatsSet) {
+        if (!isLengthSet || !isRepeatsSet) {
             throw new IllegalStateException("Одна из необходимых настроек не была выставлена");
         }
         if (!isTooFrequent(password, maxRepeats) && !isTooShort(password, minLength)) {
@@ -61,9 +61,31 @@ public class PasswordChecker {
     }
 
     public boolean isTooShort(String password, int minLength) {
-        if (password.length() < minLength) {
-            return true;
+        return (password.length() < minLength);
+    }
+
+    boolean verifyFromLecturer(String password) {
+        if (this.minLength == -1 && this.maxRepeats == -1) {
+            throw new IllegalStateException("Не все настройки пароля выставлены!");
         }
-        return false;
+        if (password.length() < minLength) {
+            return false;
+        }
+        int count = 0;
+        char previousLatter = password.charAt(0);
+        for (char latter : password.toCharArray()) {
+            if (latter == previousLatter) {
+                count++;
+            } else {
+                count = 1;
+            }
+
+            if (count > maxRepeats) {
+                return false;
+            }
+            previousLatter = latter;
+        }
+        return true;
     }
 }
+
